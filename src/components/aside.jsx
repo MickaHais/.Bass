@@ -8,7 +8,7 @@ const Aside = ({ onSelectSong, songs }) => {
   };
 
   return (
-    <div className={`fixed right-0 top-0 h-full  w-${isOpen ? '90' : '10'} bg-white p-10 shadow-lg transition-width duration-300 ${isOpen ? 'drop-shadow-[0_0px_10px_rgba(236,60,76,1)] rounded-b-lg' : ''}`}>
+    <div className={` aside fixed right-0 top-0 h-full  w-${isOpen ? '90' : '10'} bg-white p-10 shadow-lg transition-width duration-300 ${isOpen ? 'drop-shadow-[0_0px_10px_rgba(236,60,76,1)] rounded-b-lg' : ''}`}>
       <div className="text-right mb-4">
         <button onClick={toggleAside} className="text-orange-500 font-bold text-2xl">
           {isOpen ? '→' : '←'}

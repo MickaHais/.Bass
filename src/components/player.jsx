@@ -74,7 +74,7 @@ const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center absolute bot-1/4 top-1/4 left-1/4">
+    <div className="flex flex-col items-center justify-center  absolute bot-1/4 top-1/4 left-1/4">
       <div className="drop-shadow-[0_0px_10px_rgba(236,60,76,1)] bg-white p-8 rounded-lg shadow-lg relative w-96">
         <div className="flex justify-between items-center mb-4">
           <button className="bg-white">

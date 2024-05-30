@@ -8,7 +8,7 @@ const songs = [
   { title: 'PLK - Un peu de haine', file: "/src/songs/plk.mp3" },
   { title: 'Ninho - Mamacita', file: "/src/songs/ni.mp3" },
   { title: 'Kaaris - Chargé', file: "/src/songs/chargé.mp3" },
-];
+]; 
 
 function App() {
   const [selectedSong, setSelectedSong] = useState(null);

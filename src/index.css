@@ -13,6 +13,16 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* src/assets/fonts/cooper-lt-bt.css */
+@font-face {
+  font-family: 'Cooper';
+  src: url('/src/assets/fonts/CooperLTBT/coopbla.ttf') format('ttf'),
+      ;
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 a {
   font-weight: 500;
   color: #EC3C4C;
@@ -29,11 +39,10 @@ body {
   min-height: 100vh;
   display: block; 
   background-color: white;
+  font-family: 'Cooper';
 }
 .aside{
   background-image: url("src/assets/bcg.png");
-
-
 }
 
 
