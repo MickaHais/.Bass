@@ -9,6 +9,8 @@ const playIcon = "./src/assets/play.png";
 const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(songs.findIndex(s => s.title === song?.title));
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const audioRef = useRef(new Audio(song ? song.file : ''));
 
   useEffect(() => {
@@ -20,7 +22,21 @@ const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
         audioRef.current.play();
       }
     }
+    audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
+    audioRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+    return () => {
+      audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+      audioRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
   }, [song]);
+
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
 
   const togglePlayPause = () => {
     if (isPlaying) {
@@ -29,6 +45,12 @@ const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
+  };
+
+  const handleProgressChange = (e) => {
+    const newTime = e.target.value;
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
   };
 
   const playNextSong = () => {
@@ -52,7 +74,7 @@ const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center fixed top-1/4 left-1/4">
+    <div className="flex flex-col items-center justify-center absolute bot-1/4 top-1/4 left-1/4">
       <div className="drop-shadow-[0_0px_10px_rgba(236,60,76,1)] bg-white p-8 rounded-lg shadow-lg relative w-96">
         <div className="flex justify-between items-center mb-4">
           <button className="bg-white">
@@ -62,7 +84,7 @@ const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
         <div className="mb-4">
           <div className="bg-gradient-to-r from-yellow-400 to-red-500 h-64 w-64 rounded-lg mx-auto"></div>
         </div>
-        <h2 className="text-center text-black">{song ? song.title : 'Sélectionnez une chanson'}</h2>
+        <h2 className="text-center text-black">{song ? song.title : 'Selectionnez une chanson'}</h2>
         <div className="flex justify-center items-center mb-4">
           <button className="bg-white" onClick={playPrevSong}>
             <img src={prevIcon} alt="Previous" className="h-8 w-8" />
@@ -73,6 +95,16 @@ const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
           <button className="bg-white" onClick={playNextSong}>
             <img src={nextIcon} alt="Next" className="h-8 w-8" />
           </button>
+        </div>
+        <div className="w-full mb-4">
+          <input
+            type="range"
+            min="0"
+            max={duration}
+            value={currentTime}
+            onChange={handleProgressChange}
+            className="w-full appearance-none bg-gradient-to-r from-yellow-400 to-red-500 rounded-full h-2 outline-none slider-thumb"
+          />
         </div>
       </div>
     </div>
