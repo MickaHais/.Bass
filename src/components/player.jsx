@@ -1,41 +1,53 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const prevIcon = "./src/assets/avant.png";
 const pauseIcon = "./src/assets/pause.png";
 const nextIcon = "./src/assets/apres.png";
 const Repeat = "./src/assets/Repeat.png";
 const playIcon = "./src/assets/play.png";
-const songFiles = ["/src/songs/chargé.mp3", "/src/songs/autre.mp3"]; 
 
-const MusicPlayerCard = ({ songTitle }) => {
+const MusicPlayerCard = ({ songs, song, onNext, onPrev }) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSongIndex, setCurrentSongIndex] = useState(0); // Indice de la chanson actuelle
-  const audioRef = useRef(new Audio(songFiles[currentSongIndex])); // Référence à l'élément audio
+  const [currentSongIndex, setCurrentSongIndex] = useState(songs.findIndex(s => s.title === song?.title));
+  const audioRef = useRef(new Audio(song ? song.file : ''));
+
+  useEffect(() => {
+    const index = songs.findIndex(s => s.title === song?.title);
+    if (index !== -1) {
+      setCurrentSongIndex(index);
+      audioRef.current.src = songs[index].file;
+      if (isPlaying) {
+        audioRef.current.play();
+      }
+    }
+  }, [song]);
 
   const togglePlayPause = () => {
     if (isPlaying) {
-      audioRef.current.pause(); 
+      audioRef.current.pause();
     } else {
-      audioRef.current.play(); 
+      audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
   };
 
   const playNextSong = () => {
-    const newIndex = (currentSongIndex + 1) % songFiles.length; // Passer à la chanson suivante
+    onNext();
+    const newIndex = (currentSongIndex + 1) % songs.length;
     setCurrentSongIndex(newIndex);
-    audioRef.current.src = songFiles[newIndex];
+    audioRef.current.src = songs[newIndex].file;
     if (isPlaying) {
-      audioRef.current.play(); // Si la musique est en cours de lecture, jouer la nouvelle chanson
+      audioRef.current.play();
     }
   };
 
   const playPrevSong = () => {
-    const newIndex = (currentSongIndex - 1 + songFiles.length) % songFiles.length; // Passer à la chanson précédente
+    onPrev();
+    const newIndex = (currentSongIndex - 1 + songs.length) % songs.length;
     setCurrentSongIndex(newIndex);
-    audioRef.current.src = songFiles[newIndex];
+    audioRef.current.src = songs[newIndex].file;
     if (isPlaying) {
-      audioRef.current.play(); // Si la musique est en cours de lecture, jouer la nouvelle chanson
+      audioRef.current.play();
     }
   };
 
@@ -50,7 +62,7 @@ const MusicPlayerCard = ({ songTitle }) => {
         <div className="mb-4">
           <div className="bg-gradient-to-r from-yellow-400 to-red-500 h-64 w-64 rounded-lg mx-auto"></div>
         </div>
-        <h2 className="text-center font-bold text-2xl mb-2">{songTitle}</h2>
+        <h2 className="text-center text-black">{song ? song.title : 'Sélectionnez une chanson'}</h2>
         <div className="flex justify-center items-center mb-4">
           <button className="bg-white" onClick={playPrevSong}>
             <img src={prevIcon} alt="Previous" className="h-8 w-8" />
